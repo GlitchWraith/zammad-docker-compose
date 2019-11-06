@@ -7,17 +7,17 @@ services:
     depends_on:
       - zammad-railsserver
     entrypoint: /usr/local/bin/backup.sh
-    image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
+    image: zammad:zammad-postgresql-latest
     links:
       - zammad-postgresql
-    restart: ${RESTART}
+    restart: always
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-data:/opt/zammad
 
   zammad-elasticsearch:
-    image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
-    restart: ${RESTART}
+    image: zammad:zammad-elasticsearch-latest
+    restart: always
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
@@ -25,7 +25,7 @@ services:
     command: ["zammad-init"]
     depends_on:
       - zammad-postgresql
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: zammad:zammad-latest
     links:
       - zammad-elasticsearch
       - zammad-postgresql
@@ -35,26 +35,26 @@ services:
 
   zammad-memcached:
     command: ["zammad-memcached"]
-    image: ${IMAGE_REPO}:zammad-memcached${VERSION}
-    restart: ${RESTART}
+    image: zammad:zammad-memcached-latest
+    restart: always
 
   zammad-nginx:
     command: ["zammad-nginx"]
     depends_on:
       - zammad-railsserver
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: zammad:zammad-latest
     links:
       - zammad-railsserver
       - zammad-websocket
-    restart: ${RESTART}
+    restart: always
     volumes:
       - zammad-data:/opt/zammad
     expose:
       - "80"
 
   zammad-postgresql:
-    image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
-    restart: ${RESTART}
+    image: zammad:zammad-postgresql-latest
+    restart: always
     volumes:
       - postgresql-data:/var/lib/postgresql/data
 
@@ -63,12 +63,12 @@ services:
     depends_on:
       - zammad-memcached
       - zammad-postgresql
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: zammad:zammad-latest
     links:
       - zammad-elasticsearch
       - zammad-memcached
       - zammad-postgresql
-    restart: ${RESTART}
+    restart: always
     volumes:
       - zammad-data:/opt/zammad
 
@@ -77,12 +77,12 @@ services:
     depends_on:
       - zammad-memcached
       - zammad-railsserver
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: zammad:zammad-latest
     links:
       - zammad-elasticsearch
       - zammad-memcached
       - zammad-postgresql
-    restart: ${RESTART}
+    restart: always
     volumes:
       - zammad-data:/opt/zammad
 
@@ -91,11 +91,11 @@ services:
     depends_on:
       - zammad-memcached
       - zammad-railsserver
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: zammad:zammad-latest
     links:
       - zammad-postgresql
       - zammad-memcached
-    restart: ${RESTART}
+    restart: always
     volumes:
       - zammad-data:/opt/zammad
 
